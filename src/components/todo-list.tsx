@@ -6,8 +6,9 @@ import TodoItem from "./todo-item";
 export interface TodoListProps {
     todos: TodoModel[]
 }
+export interface TodoListState {}
 
-class TodoList extends Component<TodoListProps> {
+class TodoList extends Component<TodoListProps, TodoListState> {
     render() {
         return (
             <FlatList data={this.props.todos} key="todos"

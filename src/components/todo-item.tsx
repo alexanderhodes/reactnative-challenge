@@ -4,8 +4,12 @@ import { TodoModel } from '../models/todo.model';
 import { COLOR_GRAY, COLOR_PRIMARY } from '../utils/colors';
 import { getItemStyle, getViewStyle } from './todo-item.styles';
 
-class TodoItem extends Component<TodoModel> {
+interface TodoItemState extends TodoModel {}
+interface TodoItemProps extends TodoModel {}
+
+class TodoItem extends Component<TodoItemProps, TodoItemState> {
     state = {
+        id: this.props.id,
         title: this.props.title,
         completed: this.props.completed
     }
