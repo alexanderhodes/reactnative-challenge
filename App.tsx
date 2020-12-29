@@ -14,13 +14,19 @@ const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
-class App extends Component {
+interface AppProps {}
+interface AppState {
+    todos: TodoModel[],
+    title: string
+}
+
+class App extends Component<AppProps, AppState> {
     state = {
         todos: [] as TodoModel[],
         title: '' as string,
     };
 
-    constructor(props: {} | Readonly<{}>) {
+    constructor(props: AppProps) {
         super(props);
         this.getTodos();
     }
