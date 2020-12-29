@@ -2,10 +2,10 @@ import { ApolloClient, ApolloQueryResult, InMemoryCache } from '@apollo/client';
 import React, { Component } from 'react';
 import { Button, SafeAreaView, StyleSheet,Text, TextInput, View } from 'react-native';
 import { graphqlUrl } from './app.json';
+import globalStyles from './global-styles';
 import TodoList from './src/components/todo-list';
 import { QueryModel } from './src/models/query.model';
 import { TodoModel } from './src/models/todo.model';
-import { COLOR_GRAY_1, COLOR_PRIMARY } from './src/utils/colors';
 import { ALL_TODO_QUERY } from './src/utils/queries';
 import { showToast } from './src/utils/toast.service';
 
@@ -72,7 +72,7 @@ class App extends Component<AppProps, AppState> {
                     onChangeText={(title) => this.setState({title: title})}
                 />
                 <View style={styles.submit}>
-                    <Button title="add" color={COLOR_PRIMARY} onPress={() => {
+                    <Button title="add" color={globalStyles.colorPrimary} onPress={() => {
                         this.addTodo();
                     }}/>
                 </View>
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
         padding: 4,
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: COLOR_GRAY_1,
-        backgroundColor: COLOR_GRAY_1,
+        borderColor: globalStyles.colorGray1,
+        backgroundColor: globalStyles.colorGray1,
     },
     submit: {
         marginTop: 10,

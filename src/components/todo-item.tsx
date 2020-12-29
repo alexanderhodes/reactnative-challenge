@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
+import globalStyles from '../../global-styles';
 import { TodoModel } from '../models/todo.model';
-import { COLOR_GRAY, COLOR_PRIMARY } from '../utils/colors';
 import { getItemStyle, getViewStyle } from './todo-item.styles';
 
 interface TodoItemState extends TodoModel {}
@@ -21,7 +21,7 @@ class TodoItem extends Component<TodoItemProps, TodoItemState> {
                    {this.state.title}
                 </Text>
                 <Button
-                    color={this.state.completed ? COLOR_GRAY : COLOR_PRIMARY}
+                    color={this.state.completed ? globalStyles.colorGray : globalStyles.colorPrimary}
                     onPress={() => this.setState({ completed: !this.state.completed })}
                     title={this.state.completed ? "open" : "completed"}
                 />

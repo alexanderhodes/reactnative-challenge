@@ -1,5 +1,5 @@
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
-import { COLOR_PRIMARY, COLOR_WHITE } from "../utils/colors";
+import globalStyles from "../../global-styles";
 
 const styles = StyleSheet.create({
     item: {
@@ -12,10 +12,10 @@ export function getViewStyle(completed: boolean): ViewStyle {
     return {
         margin: 8,
         padding: 16,
-        backgroundColor: completed ? COLOR_PRIMARY : COLOR_WHITE,
+        backgroundColor: completed ? globalStyles.colorPrimary : globalStyles.colorWhite,
         borderTopLeftRadius: 24,
         borderBottomRightRadius: 24,
-        borderColor: COLOR_PRIMARY,
+        borderColor: globalStyles.colorPrimary,
         borderWidth: 1
     }
 }
@@ -24,7 +24,7 @@ export function getItemStyle(completed: boolean): TextStyle {
     return {
         margin: 12,
         fontSize: 24,
-        color: completed ? COLOR_WHITE : COLOR_PRIMARY
+        color: completed ? globalStyles.colorWhite : globalStyles.colorPrimary
     }
 }
 
