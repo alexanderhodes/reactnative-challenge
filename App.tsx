@@ -21,9 +21,9 @@ interface AppState {
 }
 
 class App extends Component<AppProps, AppState> {
-    state = {
-        todos: [] as TodoModel[],
-        title: '' as string,
+    state: AppState = {
+        todos: [],
+        title: '',
     };
 
     constructor(props: AppProps) {
@@ -70,6 +70,8 @@ class App extends Component<AppProps, AppState> {
                     style={styles.input}
                     value={this.state.title}
                     onChangeText={(title) => this.setState({title: title})}
+                    placeholder='Todo'
+                    placeholderTextColor={globalStyles.colorGray1}
                 />
                 <View style={styles.submit}>
                     <Button title="add" color={globalStyles.colorPrimary} onPress={() => {
