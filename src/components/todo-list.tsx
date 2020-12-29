@@ -11,7 +11,7 @@ export interface TodoListState {}
 class TodoList extends Component<TodoListProps, TodoListState> {
     render() {
         return (
-            <FlatList data={this.props.todos} key="todos"
+            <FlatList data={this.props.todos} key="todos" style={{marginBottom: 80}}
             renderItem={
                 ({item, index}) => (
                     <TodoItem key={index} id={item.id} title={item.title} completed={item.completed}/>

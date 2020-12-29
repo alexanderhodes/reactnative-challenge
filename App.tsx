@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloQueryResult, InMemoryCache } from '@apollo/client';
 import React, { Component } from 'react';
-import { Button, SafeAreaView, StyleSheet,Text, TextInput, View } from 'react-native';
+import { Button, Keyboard, SafeAreaView, StyleSheet,Text, TextInput, View } from 'react-native';
 import { graphqlUrl } from './app.json';
 import globalStyles from './global-styles';
 import TodoList from './src/components/todo-list';
@@ -32,17 +32,25 @@ class App extends Component<AppProps, AppState> {
     }
 
     addTodo(): void {
-        const todos = this.state.todos;
+        // close keyboard
+        Keyboard.dismiss();
         const title = this.state.title;
+        // check if title is entered
+        if (title.length === 0) {
+            showToast(`A todo has to be entered.`);
+            return;
+        }
+
+        const todos = this.state.todos;
         const found = todos.find(todo => todo.title === title);
+        // check if todo already exists
         if (!found) {
-            todos.push({title: this.state.title, completed: false, id: `${todos.length + 1}`});
             this.setState({
-                todos,
+                todos: [...todos, {title: this.state.title, completed: false, id: `${todos.length + 1}`}],
                 title: '',
             });
         } else {
-            showToast(`Das Todo ${title} existiert bereits.`);
+            showToast(`Todo ${title} already exists.`);
         }
     }
 
@@ -70,18 +78,15 @@ class App extends Component<AppProps, AppState> {
                     style={styles.input}
                     value={this.state.title}
                     onChangeText={(title) => this.setState({title: title})}
-                    placeholder='Todo'
-                    placeholderTextColor={globalStyles.colorGray1}
+                    onSubmitEditing={() => this.addTodo()}
                 />
                 <View style={styles.submit}>
-                    <Button title="add" color={globalStyles.colorPrimary} onPress={() => {
-                        this.addTodo();
-                    }}/>
+                    <Button title="add" color={globalStyles.colorPrimary} onPress={() => this.addTodo()}/>
                 </View>
                 <TodoList todos={this.state.todos} />
                 {this.state.todos.length === 0 ?
                     <View style={styles.message}>
-                        <Text>Derzeit sind noch keine Todo's angelegt worden.</Text>
+                        <Text>Currently, no todos are added.</Text>
                     </View>
                     : null}
             </SafeAreaView>
@@ -95,6 +100,8 @@ const styles = StyleSheet.create({
     },
     input: {
         padding: 4,
+        paddingLeft: 8,
+        paddingRight: 8,
         borderRadius: 4,
         borderWidth: 1,
         borderColor: globalStyles.colorGray1,
