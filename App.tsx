@@ -21,13 +21,13 @@ interface AppState {
 }
 
 class App extends Component<AppProps, AppState> {
-    state: AppState = {
-        todos: [],
-        title: '',
-    };
 
     constructor(props: AppProps) {
         super(props);
+        this.state = {
+            todos: [],
+            title: '',
+        };
         this.getTodos();
     }
 

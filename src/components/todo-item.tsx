@@ -8,10 +8,14 @@ interface TodoItemState extends TodoModel {}
 interface TodoItemProps extends TodoModel {}
 
 class TodoItem extends Component<TodoItemProps, TodoItemState> {
-    state: TodoItemState = {
-        id: this.props.id,
-        title: this.props.title,
-        completed: this.props.completed
+
+    constructor(props: TodoItemProps) {
+        super(props);
+        this.state = {
+            id: this.props.id,
+            title: this.props.title,
+            completed: this.props.completed
+        }
     }
 
     render() {
