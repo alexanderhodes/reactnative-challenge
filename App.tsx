@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { Button, Keyboard, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { graphqlUrl } from './app.json';
 import globalStyles from './global-styles';
+import Input from '@components/input';
 
 const apolloClient = new ApolloClient({
     uri: graphqlUrl,
@@ -85,10 +86,9 @@ class App extends Component<AppProps, AppState> {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <TextInput
-                    style={styles.input}
+                <Input
                     value={this.state.title}
-                    onChangeText={(title) => this.setState({ title: title })}
+                    onChangeText={(title: string) => this.setState({ title: title })}
                     onSubmitEditing={() => this.addTodo()}
                 />
                 <View style={styles.submit}>
