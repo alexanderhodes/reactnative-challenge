@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
 import globalStyles from '../../global-styles';
-import { TodoModel } from '../models/todo.model';
+import { TodoModel } from '@models/todo.model';
 import { getItemStyle, getViewStyle } from './todo-item.styles';
 
 interface TodoItemState extends TodoModel {}

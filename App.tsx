@@ -1,13 +1,13 @@
 import { ApolloClient, ApolloQueryResult, InMemoryCache } from '@apollo/client';
+import TodoList from '@components/todo-list';
+import { QueryModel } from '@models/query.model';
+import { TodoModel } from '@models/todo.model';
+import { ALL_TODO_QUERY } from '@utils/queries';
+import { showToast } from '@utils/toast.service';
 import React, { Component } from 'react';
 import { Button, Keyboard, SafeAreaView, StyleSheet,Text, TextInput, View } from 'react-native';
 import { graphqlUrl } from './app.json';
 import globalStyles from './global-styles';
-import TodoList from './src/components/todo-list';
-import { QueryModel } from './src/models/query.model';
-import { TodoModel } from './src/models/todo.model';
-import { ALL_TODO_QUERY } from './src/utils/queries';
-import { showToast } from './src/utils/toast.service';
 
 const apolloClient = new ApolloClient({
     uri: graphqlUrl,
