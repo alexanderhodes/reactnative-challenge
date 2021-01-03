@@ -1,21 +1,16 @@
-import { ApolloClient, ApolloQueryResult, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloQueryResult, InMemoryCache, useMutation, useQuery } from '@apollo/client';
 import Spinner from '@components/spinner';
 import TodoList from '@components/todo-list';
 import { QueryModel } from '@models/query.model';
 import { TodoModel } from '@models/todo.model';
-import { ALL_TODO_QUERY } from '@utils/queries';
+import { ALL_TODO_QUERY, CREATE_TODO_QUERY } from '@utils/queries';
 import { showToast } from '@utils/toast.service';
 import styles from './app.styles';
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Button, Keyboard, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { graphqlUrl } from './app.json';
 import globalStyles from './global-styles';
 import Input from '@components/input';
-
-const apolloClient = new ApolloClient({
-    uri: graphqlUrl,
-    cache: new InMemoryCache(),
-});
 
 interface AppProps { }
 interface AppState {
@@ -35,10 +30,6 @@ class App extends Component<AppProps, AppState> {
         };
     }
 
-    componentDidMount(): void {
-        this.getTodos();
-    }
-
     addTodo(): void {
         // close keyboard
         Keyboard.dismiss();
@@ -53,57 +44,89 @@ class App extends Component<AppProps, AppState> {
         const found = todos.find(todo => todo.title === title);
         // check if todo already exists
         if (!found) {
-            this.setState({
-                todos: [...todos, { title: this.state.title, completed: false, id: `${todos.length + 1}` }],
-                title: ''
-            });
+            //     apolloClient.mutate<TodoModel>({ mutation: CREATE_TODO_QUERY })
+            //         .then((response) => {
+            //             console.log('response', response);
+            //             this.setState({
+            //                 todos: [...todos, { title: this.state.title, completed: false, id: `${todos.length + 1}` }],
+            //                 title: ''
+            //             });
+            //         })
+            //         .catch(error => {
+            //             console.log('error', error);
+            //         });
         } else {
             showToast(`Todo ${title} already exists.`);
         }
     }
 
-    getTodos(): void {
-        apolloClient.query<QueryModel<TodoModel[]>>({ query: ALL_TODO_QUERY })
-            .catch(error => console.log('error', error))
-            .then((response) => {
-                const result = (response as ApolloQueryResult<QueryModel<TodoModel[]>>);
-                if (result && !result.loading) {
-                    const todos = result.data['allTodos'];
-                    console.log('data', todos);
-                    this.setState({
-                        todos,
-                        isLoading: false
-                    });
-                } else if (result && result.error) {
-                    console.log('error', result.error);
-                    this.setState({
-                        isLoading: false
-                    });
-                }
-            });
+    completeTodo(todo: TodoModel): void {
+        console.log('completeTodo', todo.id, todo.title, todo.completed);
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Input
-                    value={this.state.title}
-                    onChangeText={(title: string) => this.setState({ title: title })}
-                    onSubmitEditing={() => this.addTodo()}
-                />
-                <View style={styles.submit}>
-                    <Button title="add" color={globalStyles.colorPrimary} onPress={() => this.addTodo()} />
-                </View>
-                {
-                    this.state.isLoading ? <Spinner></Spinner> :
-                        this.state.todos.length === 0 ?
-                            <View style={styles.message}>
-                                <Text>Currently, no todos are added.</Text>
-                            </View> : <TodoList todos={this.state.todos} />
-                }
+                <AddTodo></AddTodo>
+                <Todos></Todos>
             </SafeAreaView>
         );
     };
+}
+
+const Todos = () => {
+    const { data, loading, error } = useQuery(ALL_TODO_QUERY);
+
+    if (loading) {
+        return <Spinner></Spinner>;
+    }
+    const todos: TodoModel[] = data.allTodos;
+
+    if (todos && todos.length) {
+        return <TodoList todos={todos} />;
+    }
+
+    return <View style={styles.message}>
+        <Text>Currently, no todos are added.</Text>
+    </View>;
+}
+
+const AddTodo = () => {
+    const [title, setTitle] = useState('');
+    const [addTodo, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_TODO_QUERY,
+        { errorPolicy: 'all' }
+    );
+
+    return <View>
+        <Input
+            value={title}
+            onChangeText={(value: string) => setTitle(value)}
+            onSubmitEditing={() => {
+                console.log('title', title);
+                addTodo({
+                    variables: { 'title': title, completed: false },
+                })
+                    .then((value) => {
+                        console.log('value', value);
+                        setTitle('');
+                    })
+                    .catch(error => console.log('error', error));
+            }}
+        />
+        <View style={styles.submit}>
+            <Button title="add" color={globalStyles.colorPrimary} onPress={() => {
+                console.log('title', title);
+                addTodo({
+                    variables: { 'title': title, completed: false },
+                })
+                    .then((value) => {
+                        console.log('value', value);
+                        setTitle('');
+                    })
+                    .catch(error => console.log('error', error));
+            }} />
+        </View>
+    </View>;
 }
 
 export default App;

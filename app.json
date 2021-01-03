@@ -1,6 +1,6 @@
 {
   "name": "b42challenge",
   "displayName": "b42challenge",
-  "graphqlUrl": "https://b42-challenge.azurewebsites.net/",
+  "graphqlUrl": "https://b42challenge.hodes.me/",
   "toastDuration": 500
 }

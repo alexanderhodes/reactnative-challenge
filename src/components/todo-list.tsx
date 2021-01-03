@@ -4,7 +4,7 @@ import { TodoModel } from "@models/todo.model";
 import TodoItem from "./todo-item";
 
 export interface TodoListProps {
-    todos: TodoModel[]
+    todos: TodoModel[];
 }
 export interface TodoListState {}
 

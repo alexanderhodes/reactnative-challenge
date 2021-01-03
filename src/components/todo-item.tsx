@@ -4,8 +4,8 @@ import globalStyles from '../../global-styles';
 import { TodoModel } from '@models/todo.model';
 import { getItemStyle, getViewStyle } from './todo-item.styles';
 
-interface TodoItemState extends TodoModel {}
 interface TodoItemProps extends TodoModel {}
+interface TodoItemState extends TodoModel {}
 
 class TodoItem extends Component<TodoItemProps, TodoItemState> {
 
@@ -18,6 +18,10 @@ class TodoItem extends Component<TodoItemProps, TodoItemState> {
         }
     }
 
+    completeTodo(): void {
+        this.setState({ completed: !this.state.completed });
+    }
+
     render() {
         return (
             <View style={getViewStyle(this.state.completed)}>
@@ -26,7 +30,7 @@ class TodoItem extends Component<TodoItemProps, TodoItemState> {
                 </Text>
                 <Button
                     color={this.state.completed ? globalStyles.colorGray : globalStyles.colorPrimary}
-                    onPress={() => this.setState({ completed: !this.state.completed })}
+                    onPress={() => this.completeTodo()}
                     title={this.state.completed ? "open" : "completed"}
                 />
             </View>
