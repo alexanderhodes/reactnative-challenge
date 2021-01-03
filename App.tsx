@@ -30,36 +30,6 @@ class App extends Component<AppProps, AppState> {
         };
     }
 
-    addTodo(): void {
-        // close keyboard
-        Keyboard.dismiss();
-        const title = this.state.title;
-        // check if title is entered
-        if (title.length === 0) {
-            showToast(`A todo has to be entered.`);
-            return;
-        }
-
-        const todos = this.state.todos;
-        const found = todos.find(todo => todo.title === title);
-        // check if todo already exists
-        if (!found) {
-            //     apolloClient.mutate<TodoModel>({ mutation: CREATE_TODO_QUERY })
-            //         .then((response) => {
-            //             console.log('response', response);
-            //             this.setState({
-            //                 todos: [...todos, { title: this.state.title, completed: false, id: `${todos.length + 1}` }],
-            //                 title: ''
-            //             });
-            //         })
-            //         .catch(error => {
-            //             console.log('error', error);
-            //         });
-        } else {
-            showToast(`Todo ${title} already exists.`);
-        }
-    }
-
     completeTodo(todo: TodoModel): void {
         console.log('completeTodo', todo.id, todo.title, todo.completed);
     }
@@ -96,35 +66,26 @@ const AddTodo = () => {
     const [addTodo, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_TODO_QUERY,
         { errorPolicy: 'all' }
     );
+    const submitTodo = () => {
+        Keyboard.dismiss();
+        addTodo({
+            variables: { 'title': title, completed: false },
+        })
+        .then(() => setTitle(''))
+        .catch(error => {
+            console.log('error', error);
+            showToast(`Error while adding todo ${title}.`);
+        });
+    }
 
     return <View>
         <Input
             value={title}
             onChangeText={(value: string) => setTitle(value)}
-            onSubmitEditing={() => {
-                console.log('title', title);
-                addTodo({
-                    variables: { 'title': title, completed: false },
-                })
-                    .then((value) => {
-                        console.log('value', value);
-                        setTitle('');
-                    })
-                    .catch(error => console.log('error', error));
-            }}
+            onSubmitEditing={() => submitTodo()}
         />
         <View style={styles.submit}>
-            <Button title="add" color={globalStyles.colorPrimary} onPress={() => {
-                console.log('title', title);
-                addTodo({
-                    variables: { 'title': title, completed: false },
-                })
-                    .then((value) => {
-                        console.log('value', value);
-                        setTitle('');
-                    })
-                    .catch(error => console.log('error', error));
-            }} />
+            <Button title="add" color={globalStyles.colorPrimary} onPress={() => submitTodo()} />
         </View>
     </View>;
 }
