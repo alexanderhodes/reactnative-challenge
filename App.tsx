@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native';
 import styles from './app.styles';
 
-interface AppProps { }
+interface AppProps {}
 interface AppState {}
 
 class App extends Component<AppProps, AppState> {

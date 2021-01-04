@@ -10,7 +10,19 @@ import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 
 const apolloClient = new ApolloClient({
   uri: graphqlUrl,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          allTodos: {
+            merge(existing, incoming) {
+              return incoming;
+            }
+          }
+        }
+      }
+    }
+  })
 });
 
 const MainApp = () => (
