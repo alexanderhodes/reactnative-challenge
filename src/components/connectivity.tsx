@@ -20,6 +20,7 @@ class Connectivity extends Component<ConnectivityProps, ConnectivityState> {
     }
 
     componentDidMount(): void {
+        // create subscription for getting network state if phone is connected
         const subscription = NetInfo.addEventListener(state => {
             this.setState({
                 connected: state.isConnected
@@ -31,6 +32,7 @@ class Connectivity extends Component<ConnectivityProps, ConnectivityState> {
     }
 
     componentWillUnmount(): void {
+        // cancel subscription
         this.state.connectivitySubscription();
     }
 

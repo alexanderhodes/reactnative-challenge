@@ -23,18 +23,8 @@ class Input extends Component<InputProps, InputState> {
             <TextInput
                 {...this.props}
                 style={[styles.input, this.state.style]}
-                onFocus={() => {
-                    this.setState({
-                        style: styles.focussed
-                    });
-                    console.log('focus');
-                }}
-                onBlur={() => {
-                    this.setState({
-                        style: styles.initial
-                    });
-                    console.log('blur');
-                }}
+                onFocus={() => this.setState({ style: styles.focussed })}
+                onBlur={() => this.setState({ style: styles.initial })}
             />
         );
     }

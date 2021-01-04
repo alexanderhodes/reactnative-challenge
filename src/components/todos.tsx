@@ -8,6 +8,7 @@ import TodoItem from "./todo-item";
 import styles from "./todos.styles";
 
 const Todos = () => {
+    // use query for getting all todos from graphql
     const { data, loading } = useQuery(ALL_TODO_QUERY, {
         pollInterval: 1000,
         fetchPolicy: "cache-and-network"
@@ -15,21 +16,23 @@ const Todos = () => {
 
     const todos: TodoModel[] = data ? data.allTodos : [];
     if (loading && todos.length === 0) {
-        return <Spinner></Spinner>;
+        // display spinner if todos are loaded
+        return <Spinner></Spinner>
     }
 
     if (todos && todos.length) {
-        return  <FlatList data={todos} key="todos" style={{marginBottom: todos && todos.length ? 80 : 0}}
+        return <FlatList data={todos} key="todos" style={{marginBottom: todos && todos.length ? 80 : 0}}
         renderItem={
             ({item, index}) => (
                 <TodoItem key={index} id={item.id} title={item.title} completed={item.completed}/>
             )
-        }/>;
+        }/>
     }
 
+    // display message that no todos are found
     return <View style={styles.message}>
         <Text>Currently, no todos are added.</Text>
-    </View>;
+    </View>
 }
 
 export default Todos;

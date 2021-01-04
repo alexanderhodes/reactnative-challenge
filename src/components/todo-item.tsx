@@ -21,6 +21,7 @@ const TodoItem = (todoProp: TodoModel) => {
     const [todo, setTodo] = useState(todoProp);
 
     const clickDeleteTodo = () => {
+        // execute delete todo mutation
         deleteTodo({ variables: { id: Number.parseInt(`${todo.id}`) } })
             .then((response) => {
                 if (response.errors) {
@@ -36,18 +37,22 @@ const TodoItem = (todoProp: TodoModel) => {
             title: todo.title,
             completed: !todo.completed
         };
+        // execute complete todo mutation
         completeTodo({ variables: updatedTodo })
             .then((response) => {
                 if (response.data) {
+                    // update for updating completed status
                     setTodo(updatedTodo);
                 } 
                 if (response.errors) {
+                    // display error because update failed
                     handleError('update', todo.title, response.errors);
                 }
             })
             .catch((error) => handleError('update', todo.title, error));
     };
 
+    // right action with displaying trash icon for deleting
     const renderRightActions = () => (
         <View style={styles.rightActionView}>
             <Animated.View style={styles.rightActionAnimatedView}>

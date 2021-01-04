@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { persistCache } from "apollo3-cache-persist";
 import { graphqlUrl } from '../app.json';
 
+// initialize apollo client with async storage
 const createApolloClient = async () => {
     const cache = new InMemoryCache({
         typePolicies: {

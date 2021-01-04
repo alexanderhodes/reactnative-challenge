@@ -25,6 +25,7 @@ class App extends Component<AppProps, AppState> {
     }
 
     async componentDidMount() {
+        // initialize apollo client at first
         try {
             const apolloClient = await createApolloClient();
 
@@ -50,7 +51,7 @@ class App extends Component<AppProps, AppState> {
 
         return (
             <ApolloProvider client={this.state.client}>
-                    <Connectivity></Connectivity>
+                <Connectivity></Connectivity>
                 <SafeAreaView style={styles.container}>
                     <AddTodo></AddTodo>
                     <Todos></Todos>
