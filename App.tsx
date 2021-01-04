@@ -28,10 +28,6 @@ class App extends Component<AppProps, AppState> {
         };
     }
 
-    completeTodo(todo: TodoModel): void {
-        console.log('completeTodo', todo.id, todo.title, todo.completed);
-    }
-
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -43,12 +39,14 @@ class App extends Component<AppProps, AppState> {
 }
 
 const Todos = () => {
-    const { data, loading, error } = useQuery(ALL_TODO_QUERY);
+    const { data, loading } = useQuery(ALL_TODO_QUERY, {
+        pollInterval: 500
+    });
 
-    if (loading) {
+    const todos: TodoModel[] = data ? data.allTodos : [];
+    if (loading && todos.length === 0) {
         return <Spinner></Spinner>;
     }
-    const todos: TodoModel[] = data ? data.allTodos : [];
 
     if (todos && todos.length) {
         return <TodoList todos={todos} />;
@@ -63,16 +61,20 @@ const AddTodo = () => {
     const [title, setTitle] = useState('');
     const [addTodo] = useMutation(CREATE_TODO_MUTATION, { errorPolicy: 'all' });
     const submitTodo = () => {
+        // hide keyboard
         Keyboard.dismiss();
+        // execute mutation
         addTodo({
             variables: { 'title': title, completed: false },
         })
+        // reset title when successful
         .then(() => setTitle(''))
+        // catch error while mutating
         .catch(error => {
             console.log('error', error);
             showToast(`Error while adding todo ${title}.`);
         });
-    }
+    };
 
     return <View>
         <Input
