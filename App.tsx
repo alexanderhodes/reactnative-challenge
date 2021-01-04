@@ -1,5 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
 import AddTodo from '@components/add-todo';
+import Connectivity from '@components/connectivity';
 import Spinner from '@components/spinner';
 import Todos from '@components/todos';
 import React, { Component } from 'react';
@@ -49,6 +50,7 @@ class App extends Component<AppProps, AppState> {
 
         return (
             <ApolloProvider client={this.state.client}>
+                    <Connectivity></Connectivity>
                 <SafeAreaView style={styles.container}>
                     <AddTodo></AddTodo>
                     <Todos></Todos>

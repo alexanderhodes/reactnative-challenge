@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.6",
     "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/netinfo": "^5.9.9",
     "apollo3-cache-persist": "^0.9.1",
     "graphql": "^15.4.0",
     "react": "16.13.1",
