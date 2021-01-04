@@ -1,15 +1,15 @@
 import { useQuery } from "@apollo/client";
 import { TodoModel } from "@models/todo.model";
 import { ALL_TODO_QUERY } from "@utils/queries";
-import { Text, View } from "react-native";
-import TodoList from "./todo-list";
 import React from 'react';
+import { FlatList, Text, View } from "react-native";
 import Spinner from "./spinner";
+import TodoItem from "./todo-item";
 import styles from "./todos.styles";
 
 const Todos = () => {
     const { data, loading } = useQuery(ALL_TODO_QUERY, {
-        pollInterval: 500,
+        pollInterval: 1000,
         fetchPolicy: "cache-and-network"
     });
 
@@ -19,7 +19,12 @@ const Todos = () => {
     }
 
     if (todos && todos.length) {
-        return <TodoList todos={todos} />;
+        return  <FlatList data={todos} key="todos" style={{marginBottom: todos && todos.length ? 80 : 0}}
+        renderItem={
+            ({item, index}) => (
+                <TodoItem key={index} id={item.id} title={item.title} completed={item.completed}/>
+            )
+        }/>;
     }
 
     return <View style={styles.message}>
