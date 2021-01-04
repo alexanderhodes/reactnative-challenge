@@ -2,33 +2,13 @@
  * @format
  */
 import React from 'react';
-import {AppRegistry} from 'react-native';
+import { AppRegistry } from 'react-native';
 import 'react-native-gesture-handler';
 import App from './App';
-import {name as appName, graphqlUrl} from './app.json';
-import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
-
-const apolloClient = new ApolloClient({
-  uri: graphqlUrl,
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          allTodos: {
-            merge(existing, incoming) {
-              return incoming;
-            }
-          }
-        }
-      }
-    }
-  })
-});
+import { name as appName } from './app.json';
 
 const MainApp = () => (
-  <ApolloProvider client={apolloClient}>
-    <App client={apolloClient} />
-  </ApolloProvider>
+    <App />
 );
 
 AppRegistry.registerComponent(appName, () => MainApp);
