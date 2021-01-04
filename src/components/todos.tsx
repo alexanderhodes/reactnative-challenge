@@ -9,7 +9,8 @@ import styles from "./todos.styles";
 
 const Todos = () => {
     const { data, loading } = useQuery(ALL_TODO_QUERY, {
-        pollInterval: 500
+        pollInterval: 500,
+        fetchPolicy: "cache-and-network"
     });
 
     const todos: TodoModel[] = data ? data.allTodos : [];

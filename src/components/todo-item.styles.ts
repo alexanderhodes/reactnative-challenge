@@ -1,10 +1,30 @@
-import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { I18nManager, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import globalStyles from "../../global-styles";
 
 const styles = StyleSheet.create({
-    item: {
-        margin: 12,
-        fontSize: 24
+    actionText: {
+        color: 'white',
+        fontSize: 16,
+        backgroundColor: 'transparent',
+        padding: 16,
+        marginTop: 8
+    },
+    rightAction: {
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+    },
+    rightActionView: {
+        width: 64,
+        marginTop: 8,
+        marginBottom: 8,
+        marginRight: 8,
+        marginLeft: 8,
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row'
+    },
+    rightActionAnimatedView: {
+        flex: 1,
+        transform: [{ translateX: 0 }]
     }
 });
 
