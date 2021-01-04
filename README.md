@@ -15,4 +15,4 @@ run ios
 `npm run ios`
 
 Demo 
-[![Demo](./demo.mp4)](./demo.mp4)
+[![Demo](./screenshot.png)](https://github.com/alexanderhodes/reactnative-challenge/blob/master/demo.mp4)
