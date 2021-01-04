@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { TodoModel } from '@models/todo.model';
-import { UPDATE_TODO_MUTATION } from '@utils/queries';
+import { DELETE_TODO_MUTATION, UPDATE_TODO_MUTATION } from '@utils/queries';
 import { showToast } from '@utils/toast.service';
 import React, { useState } from 'react';
 import { Animated, Button, Text, View } from 'react-native';
@@ -10,14 +10,25 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import globalStyles from '../../global-styles';
 import styles, { getItemStyle, getViewStyle } from './todo-item.styles';
 
-const handleUpdateError = (title: string, error: any) => {
+const handleError = (type: 'update' | 'delete', title: string, error: any) => {
     console.log('error', error);
-    showToast(`update completed for ${title} failed`);
+    showToast(`${type} completed for ${title} failed`);
 }
 
 const TodoItem = (todoProp: TodoModel) => {
     const [completeTodo] = useMutation(UPDATE_TODO_MUTATION, { errorPolicy: 'all' });
+    const [deleteTodo] = useMutation(DELETE_TODO_MUTATION, { errorPolicy: 'all' });
     const [todo, setTodo] = useState(todoProp);
+
+    const clickDeleteTodo = () => {
+        deleteTodo({ variables: { id: Number.parseInt(`${todo.id}`) } })
+            .then((response) => {
+                if (response.errors) {
+                    handleError('delete', todo.title, response.errors);
+                }
+            })
+            .catch(error => handleError('delete', todo.title, error));
+    }
 
     const clickCompleteTodo = () => {
         const updatedTodo = {
@@ -31,10 +42,10 @@ const TodoItem = (todoProp: TodoModel) => {
                     setTodo(updatedTodo);
                 } 
                 if (response.errors) {
-                    handleUpdateError(todo.title, response.errors);
+                    handleError('update', todo.title, response.errors);
                 }
             })
-            .catch((error) => handleUpdateError(todo.title, error));
+            .catch((error) => handleError('update', todo.title, error));
     };
 
     const renderRightActions = () => (
@@ -42,7 +53,7 @@ const TodoItem = (todoProp: TodoModel) => {
             <Animated.View style={styles.rightActionAnimatedView}>
               <RectButton
                 style={[styles.rightAction, { backgroundColor: globalStyles.colorRed }]}
-                onPress={() => showToast('delete')}>
+                onPress={() => clickDeleteTodo()}>
                     <Icon style={styles.actionText} name='trash' type='font-awesome' color={globalStyles.colorWhite}></Icon>
               </RectButton>
             </Animated.View>
