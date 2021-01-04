@@ -1,16 +1,14 @@
-import { ApolloClient, ApolloQueryResult, InMemoryCache, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import Input from '@components/input';
 import Spinner from '@components/spinner';
 import TodoList from '@components/todo-list';
-import { QueryModel } from '@models/query.model';
 import { TodoModel } from '@models/todo.model';
-import { ALL_TODO_QUERY, CREATE_TODO_QUERY } from '@utils/queries';
+import { ALL_TODO_QUERY, CREATE_TODO_MUTATION } from '@utils/queries';
 import { showToast } from '@utils/toast.service';
-import styles from './app.styles';
 import React, { Component, useState } from 'react';
-import { Button, Keyboard, SafeAreaView, Text, TextInput, View } from 'react-native';
-import { graphqlUrl } from './app.json';
+import { Button, Keyboard, SafeAreaView, Text, View } from 'react-native';
+import styles from './app.styles';
 import globalStyles from './global-styles';
-import Input from '@components/input';
 
 interface AppProps { }
 interface AppState {
@@ -50,7 +48,7 @@ const Todos = () => {
     if (loading) {
         return <Spinner></Spinner>;
     }
-    const todos: TodoModel[] = data.allTodos;
+    const todos: TodoModel[] = data ? data.allTodos : [];
 
     if (todos && todos.length) {
         return <TodoList todos={todos} />;
@@ -63,9 +61,7 @@ const Todos = () => {
 
 const AddTodo = () => {
     const [title, setTitle] = useState('');
-    const [addTodo, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_TODO_QUERY,
-        { errorPolicy: 'all' }
-    );
+    const [addTodo] = useMutation(CREATE_TODO_MUTATION, { errorPolicy: 'all' });
     const submitTodo = () => {
         Keyboard.dismiss();
         addTodo({

@@ -1,43 +1,48 @@
-import React, { Component } from 'react';
+import { useMutation } from '@apollo/client';
+import { TodoModel } from '@models/todo.model';
+import { UPDATE_TODO_MUTATION } from '@utils/queries';
+import { showToast } from '@utils/toast.service';
+import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import globalStyles from '../../global-styles';
-import { TodoModel } from '@models/todo.model';
 import { getItemStyle, getViewStyle } from './todo-item.styles';
 
-interface TodoItemProps extends TodoModel {}
-interface TodoItemState extends TodoModel {}
-
-class TodoItem extends Component<TodoItemProps, TodoItemState> {
-
-    constructor(props: TodoItemProps) {
-        super(props);
-        this.state = {
-            id: this.props.id,
-            title: this.props.title,
-            completed: this.props.completed
-        }
-    }
-
-    completeTodo(): void {
-        this.setState({ completed: !this.state.completed });
-    }
-
-    render() {
-        return (
-            <View style={getViewStyle(this.state.completed)}>
-                <Text style={getItemStyle(this.state.completed)}>
-                   {this.state.title}
-                </Text>
-                <Button
-                    color={this.state.completed ? globalStyles.colorGray : globalStyles.colorPrimary}
-                    onPress={() => this.completeTodo()}
-                    title={this.state.completed ? "open" : "completed"}
-                />
-            </View>
-        );
-    };
+const handleUpdateError = (title: string, error: any) => {
+    console.log('error', error);
+    showToast(`update completed for ${title} failed`);
 }
 
+const TodoItem = (todoProp: TodoModel) => {
+    const [completeTodo] = useMutation(UPDATE_TODO_MUTATION, { errorPolicy: 'all' });
+    const [todo, setTodo] = useState(todoProp);
 
+    return <View style={getViewStyle(todo.completed)}>
+        <Text style={getItemStyle(todo.completed)}>
+            {todo.title}
+        </Text>
+
+        <Button
+            color={todo.completed ? globalStyles.colorGray : globalStyles.colorPrimary}
+            onPress={() => {
+                const updatedTodo = {
+                    id: Number.parseInt(`${todo.id}`),
+                    title: todo.title,
+                    completed: !todo.completed
+                };
+                completeTodo({ variables: updatedTodo })
+                    .then((response) => {
+                        if (response.data) {
+                            setTodo(updatedTodo);
+                        } 
+                        if (response.errors) {
+                            handleUpdateError(todo.title, response.errors);
+                        }
+                    })
+                    .catch((error) => handleUpdateError(todo.title, error));
+            }}
+            title={todo.completed ? "open" : "completed"}
+        />
+    </View>
+}
 
 export default TodoItem;

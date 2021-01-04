@@ -1,6 +1,6 @@
 
 export interface TodoModel {
-    id: string;
+    id: number;
     title: string;
     completed: boolean;
 }
